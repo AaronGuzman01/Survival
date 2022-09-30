@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class JoyStick : MonoBehaviour
 {
+    bool dragging;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        dragging = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !dragging)
         {
-
+            transform.position = Input.mousePosition;
+            dragging = true;
+        }
+        else if (!Input.GetMouseButton(0) && dragging)
+        {
+            dragging = false;
         }
     }
 }
