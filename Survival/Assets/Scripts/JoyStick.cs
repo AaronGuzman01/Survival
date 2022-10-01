@@ -1,28 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.OnScreen;
+using UnityEngine.UI;
 
 public class JoyStick : MonoBehaviour
 {
-    bool dragging;
+    OnScreenStick joyStick;
+    GameObject cont;
+    public Canvas canvas;
 
-    // Start is called before the first frame update
     void Start()
     {
-        dragging = false;
+        joyStick = GetComponent<OnScreenStick>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0) && !dragging)
+        if (Input.GetMouseButtonDown(0))
         {
             transform.position = Input.mousePosition;
-            dragging = true;
-        }
-        else if (!Input.GetMouseButton(0) && dragging)
-        {
-            dragging = false;
+
+            //joyStick.OnPointerDown(new PointerEventData(GetComponent<EventSystem>()));
         }
     }
 }
