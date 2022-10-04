@@ -43,6 +43,7 @@ public class MovementJoystick : MonoBehaviour
             joystick.transform.position = joystickTouchPos + joystickVec * joystickRadius;
         }
     }
+
     public void PointerUp()
     {
         joystickVec = Vector2.zero;
