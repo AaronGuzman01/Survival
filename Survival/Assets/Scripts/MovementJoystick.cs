@@ -42,6 +42,8 @@ public class MovementJoystick : MonoBehaviour
         {
             joystick.transform.position = joystickTouchPos + joystickVec * joystickRadius;
         }
+
+        ItemGenerator.isMoving = true;
     }
 
     public void PointerUp()
@@ -51,5 +53,7 @@ public class MovementJoystick : MonoBehaviour
         joystickB.transform.position = joystickOriginalPos;
         joystick.SetActive(false);
         joystickB.SetActive(false);
+
+        ItemGenerator.isMoving = false;
     }
 }

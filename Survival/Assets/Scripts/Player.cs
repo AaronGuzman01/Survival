@@ -6,19 +6,22 @@ public class Player : MonoBehaviour
 {
     public MovementJoystick joystick;
     public Slider health;
+    public Slider experience;
     public float playerSpeed;
     private Rigidbody2D rb;
     private PlayerData playerData;
 
     // Start is called before the first frame update
     void Start()
-    { 
+    {
         rb = GetComponent<Rigidbody2D>(); 
         playerData = GetComponent<PlayerData>();
     }
 
     void FixedUpdate()
     {
+        ItemData.playerPos = transform.position;
+
         if (joystick.joystickVec.y != 0)
         {
             rb.velocity = new Vector2(joystick.joystickVec.x * playerSpeed, joystick.joystickVec.y * playerSpeed);
@@ -55,6 +58,15 @@ public class Player : MonoBehaviour
             {
                 playerData.UpdateHealth(0f);
                 health.value = 0f;
+            }
+        }
+        else if (collision.GetComponent<ItemData>())
+        {
+            if (collision.GetComponent<OrbData>())
+            {
+                playerData.UpdateExperience(collision.GetComponent<OrbData>().GetExpGain());
+                experience.value = playerData.GetExperience() / 100f;
+                collision.GetComponent<ItemData>().DestroyOrb();
             }
         }
     }
