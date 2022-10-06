@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
     {
         if (collision.GetComponent<Enemy>())
         {
-            float damageAmount = collision.GetComponent<Enemy>().enemyDamage;
+            float damageAmount = collision.GetComponent<Enemy>().GetEnemyDamage();
 
             if (playerData.GetHealth() > 0f && playerData.GetHealth() - damageAmount * Time.deltaTime >= 0f)
             {
