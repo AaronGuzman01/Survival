@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ItemAttracter : MonoBehaviour
 {
+    [SerializeField]
     public Transform player;
 
     // Update is called once per frame

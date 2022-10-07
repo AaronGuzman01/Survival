@@ -6,20 +6,30 @@ public class ItemGenerator : MonoBehaviour
 {
     public static int orbCount;
     public static bool isMoving;
-    public GameObject player;
-    public List<GameObject> orbs;
-    public int[] orbChance;
-    public int[] orbQuantity;
-    private bool canGenerate;
-    private float generationDelay;
+    [SerializeField]
+    private Transform player;
+    [SerializeField]
+    private List<GameObject> orbs;
+    [SerializeField]
+    private GameObject healingItem;
+    [SerializeField]
+    private int[] orbChance;
+    [SerializeField]
+    private int[] orbQuantity;
+    private bool canGenerateOrbs;
+    private bool canGenerateHealing;
+    private float orbDelay;
+    private float healingDelay;
     private int maxOrbs;
 
     void Start()
     {
         isMoving = false;
-        canGenerate = true;
+        canGenerateOrbs = true;
+        canGenerateHealing = true;
         orbCount = 0;
-        generationDelay = 1f;
+        orbDelay = 1f;
+        healingDelay = 5f;
         maxOrbs = 50;
     }
 
@@ -29,18 +39,13 @@ public class ItemGenerator : MonoBehaviour
         if (isMoving)
         {
             GenerateOrbs();
-            /*
-            GameObject orb = Instantiate(orbs[0], transform);
-            orbs.Add(orb);
-            orb.transform.position = RandomPositionGenerator(player.transform.position, 5f, 20f);
-            orb.gameObject.SetActive(true);
-            */
+            GenerateHealing();
         }
     }
 
     private void GenerateOrbs()
     {
-        if (canGenerate && orbCount < maxOrbs)
+        if (canGenerateOrbs && orbCount < maxOrbs)
         {
             for (int i = 0; i < orbs.Count; i++)
             {
@@ -49,38 +54,43 @@ public class ItemGenerator : MonoBehaviour
                     if (Random.value < orbChance[i] / 100f)
                     {
                         GameObject orb = Instantiate(orbs[i], transform);
-                        orb.transform.position = RandomPositionGenerator(player.transform.position, 5f, 25f);
+                        orb.transform.position = PositionGenerator.GenerateRandomPosition(player.position, 5f, 25f);
                         orb.gameObject.SetActive(true);
                         orbCount++;
                     }
                 }
             }
 
-            canGenerate = false;
+            canGenerateOrbs = false;
 
-            StartCoroutine(DelayGeneration());
+            StartCoroutine(DelayOrbGeneration());
         }
     }
 
-    IEnumerator DelayGeneration()
+    public void GenerateHealing()
     {
-        yield return new WaitForSeconds(generationDelay);
-        canGenerate = true;
-    }
-
-    private Vector2 RandomPositionGenerator(Vector2 playerPos, float minRange, float maxRange)
-    {
-        float playerXPos = playerPos.x;
-        float playerYPos = playerPos.y;
-        float randomXPos = Random.Range(playerXPos - maxRange, playerXPos + maxRange);
-        float randomYPos = Random.Range(playerYPos - maxRange, playerYPos + maxRange);
-
-        while ((randomXPos < minRange && randomXPos > -minRange) && (randomYPos < minRange && randomYPos > -minRange))
+        if (canGenerateHealing)
         {
-            randomXPos = Random.Range(playerXPos - maxRange, playerXPos + maxRange);
-            randomYPos = Random.Range(playerYPos - maxRange, playerYPos + maxRange);
-        }
+            if (Random.value < 0.15f)
+            {
+                GameObject healing = Instantiate(healingItem, transform);
+                healing.transform.position = PositionGenerator.GenerateRandomPosition(player.position, 5f, 25f);
+                healing.gameObject.SetActive(true);
 
-        return new Vector2(randomXPos, randomYPos);
+                canGenerateHealing = false;
+            }
+        }
+    }
+
+    IEnumerator DelayOrbGeneration()
+    {
+        yield return new WaitForSeconds(orbDelay);
+        canGenerateOrbs = true;
+    }
+
+    IEnumerator DealyHealingGeneration()
+    {
+        yield return new WaitForSeconds(healingDelay);
+        canGenerateHealing = true;
     }
 }

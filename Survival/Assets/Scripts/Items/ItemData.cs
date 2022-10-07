@@ -23,23 +23,6 @@ public class ItemData : MonoBehaviour
         }
 
         accel += 0.001f;
-
-        CheckDestroy();
-    }
-
-    private void CheckDestroy()
-    {
-        if (Vector2.Distance(transform.position, playerPos) > 40f)
-        {
-            --ItemGenerator.orbCount;
-            Destroy(transform.gameObject);
-        }
-    }
-
-    public void DestroyOrb()
-    {
-        --ItemGenerator.orbCount;
-        Destroy(transform.gameObject);
     }
 
     public void SetFollow()

@@ -4,10 +4,14 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public MovementJoystick joystick;
-    public Slider health;
-    public Slider experience;
-    public float playerSpeed;
+    [SerializeField]
+    private MovementJoystick joystick;
+    [SerializeField]
+    private Slider health;
+    [SerializeField]
+    private Slider experience;
+    [SerializeField]
+    private float playerSpeed;
     private Rigidbody2D rb;
     private PlayerData playerData;
 
@@ -52,7 +56,7 @@ public class Player : MonoBehaviour
             if (playerData.GetHealth() > 0f && playerData.GetHealth() - damageAmount * Time.deltaTime >= 0f)
             {
                 playerData.UpdateHealth(playerData.GetHealth() - damageAmount * Time.deltaTime);
-                health.value = (playerData.GetHealth() - damageAmount * Time.deltaTime) / 100f;
+                health.value = playerData.GetHealth() / 100f;
             }
             else if (playerData.GetHealth() <= damageAmount)
             {
@@ -66,8 +70,30 @@ public class Player : MonoBehaviour
             {
                 playerData.UpdateExperience(collision.GetComponent<OrbData>().GetExpGain());
                 experience.value = playerData.GetExperience() / 100f;
-                collision.GetComponent<ItemData>().DestroyOrb();
+                collision.GetComponent<OrbData>().DestroyOrb();
+            }
+            else if (collision.GetComponent<HealingData>())
+            {
+                float healingAmount = collision.GetComponent<HealingData>().GetHealingAmount();
+
+                if (playerData.GetHealth() + healingAmount <= 100)
+                {
+                    playerData.UpdateHealth(playerData.GetHealth() + healingAmount);
+                }
+                else
+                {
+                    playerData.UpdateHealth(100f);
+                }
+
+                health.value = playerData.GetHealth();
+                Destroy(collision.GetComponent<HealingData>().gameObject);
             }
         }
+    }
+
+    public void GetExperienceFromKill(float exp)
+    {
+        playerData.UpdateExperience(exp);
+        experience.value = playerData.GetExperience() / 100f;
     }
 }

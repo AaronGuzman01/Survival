@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class ProjectileGenerator : MonoBehaviour
 {
-    public Transform player;
-    public GameObject projectile;
-    public float speed;
+    [SerializeField]
+    private Transform player;
+    [SerializeField]
+    private GameObject projectile;
+    [SerializeField]
+    private float speed;
     private bool hasGenerated;
 
     // Start is called before the first frame update
