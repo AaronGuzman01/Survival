@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public GameObject player;
+    [SerializeField]
+    private GameObject player;
     [SerializeField]
     private float enemySpeed;
     [SerializeField]
     private float enemyDamage;
     [SerializeField]
     private float health;
+    [SerializeField]
+    private float enemyExp;
 
     // Update is called once per frame
     void Update()
@@ -54,6 +57,8 @@ public class Enemy : MonoBehaviour
             {
                 health = 0f;
             }
+
+            player.GetComponent<Player>().GetExperienceFromKill(enemyExp);
         }
     }
 }

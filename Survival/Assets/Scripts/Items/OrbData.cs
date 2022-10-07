@@ -5,20 +5,22 @@ public class OrbData : MonoBehaviour
     [SerializeField]
     private float expGain;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Vector2.Distance(transform.position, ItemData.playerPos) > 40f)
+        {
+            DestroyOrb();
+        }
     }
 
     public float GetExpGain()
     {
         return expGain;
+    }
+
+    public void DestroyOrb()
+    {
+        --ItemGenerator.orbCount;
+        Destroy(transform.gameObject);
     }
 }
