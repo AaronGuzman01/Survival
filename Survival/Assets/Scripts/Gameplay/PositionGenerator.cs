@@ -17,4 +17,59 @@ public class PositionGenerator : MonoBehaviour
 
         return new Vector2(randomXPos, randomYPos);
     }
+
+    public static Vector2 GenerateRandomQuadrantPosition(Vector2 playerPos, float minRange, float maxRange, int quadrant)
+    {
+        float playerXPos = playerPos.x;
+        float playerYPos = playerPos.y;
+        float randomXPos = Random.Range(playerXPos - maxRange, playerXPos + maxRange);
+        float randomYPos = Random.Range(playerYPos - maxRange, playerYPos + maxRange);
+
+        if (quadrant == 1)
+        {
+            if (!(randomXPos >= playerXPos + minRange && randomYPos >= playerXPos) || !(randomYPos >= playerYPos + minRange && randomXPos >= playerYPos))
+            {
+                while ((randomXPos < playerXPos + minRange) && (randomYPos < playerYPos + minRange))
+                {
+                    randomXPos = Random.Range(playerXPos - maxRange, playerXPos + maxRange);
+                    randomYPos = Random.Range(playerYPos - maxRange, playerYPos + maxRange);
+                }
+            }
+        }
+        else if (quadrant == 2)
+        {
+            if (!(randomXPos <= playerXPos - minRange && randomYPos >= playerXPos) || !(randomYPos >= playerYPos + minRange && randomXPos <= playerYPos))
+            {
+                while ((randomXPos > playerXPos - minRange) && (randomYPos < playerYPos + minRange))
+                {
+                    randomXPos = Random.Range(playerXPos - maxRange, playerXPos + maxRange);
+                    randomYPos = Random.Range(playerYPos - maxRange, playerYPos + maxRange);
+                }
+            }
+        }
+        else if (quadrant == 3)
+        {
+            if (!(randomXPos <= playerXPos - minRange && randomYPos <= playerXPos) || !(randomYPos <= playerYPos - minRange && randomXPos <= playerYPos))
+            {
+                while ((randomXPos > playerXPos - minRange) && (randomYPos > playerYPos - minRange))
+                {
+                    randomXPos = Random.Range(playerXPos - maxRange, playerXPos + maxRange);
+                    randomYPos = Random.Range(playerYPos - maxRange, playerYPos + maxRange);
+                }
+            }
+        }
+        else
+        {
+            if (!(randomXPos >= playerXPos + minRange && randomYPos <= playerXPos) || !(randomYPos <= playerYPos - minRange && randomXPos >= playerYPos))
+            {
+                while ((randomXPos < playerXPos + minRange) && (randomYPos > playerYPos - minRange))
+                {
+                    randomXPos = Random.Range(playerXPos - maxRange, playerXPos + maxRange);
+                    randomYPos = Random.Range(playerYPos - maxRange, playerYPos + maxRange);
+                }
+            }
+        }
+
+        return new Vector2(randomXPos, randomYPos);
+    }
 }
