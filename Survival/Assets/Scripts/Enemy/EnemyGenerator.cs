@@ -29,6 +29,8 @@ public class EnemyGenerator : MonoBehaviour
 
     private void GenerateEnemies()
     {
+        int spawnCount = 0;
+
         for (int i = 0; i < enemies.Count; i++)
         {
             if (canSpawn[i])
@@ -36,11 +38,34 @@ public class EnemyGenerator : MonoBehaviour
                 for (int j = 0; j < spawnAmount[i]; j++)
                 {
                     GameObject enemy = Instantiate(enemies[i], transform);
-                    enemy.transform.position = PositionGenerator.GenerateRandomPosition(player.position, 15f, 20f);
+
+                    spawnCount++;
+
+                    if (spawnCount == 1)
+                    {
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 1);
+                    }
+                    else if (spawnCount == 2)
+                    {
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 2);
+                    }
+                    else if (spawnCount == 3)
+                    {
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 3);
+                    }
+                    else
+                    {
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 4);
+
+                        spawnCount = 0;
+                    }
+
+
                     enemy.gameObject.SetActive(true);
                 }
 
                 canSpawn[i] = false;
+                spawnCount = 0;
 
                 StartCoroutine(DelayEnemy(i));
             }
@@ -49,7 +74,7 @@ public class EnemyGenerator : MonoBehaviour
 
     IEnumerator DelayEnemy(int index)
     {
-        yield return new WaitForSeconds(delays[index]);
+        yield return new WaitForSeconds(delays[index] * PlayerPrefs.GetFloat("EnemyDelay"));
         canSpawn[index] = true;
     }
 }

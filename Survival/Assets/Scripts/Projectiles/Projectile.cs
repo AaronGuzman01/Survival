@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
 
     public float GetDamage()
     {
-        return damage;
+        return damage * PlayerPrefs.GetFloat("ProjDamage");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

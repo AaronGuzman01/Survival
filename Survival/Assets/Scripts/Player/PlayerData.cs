@@ -31,14 +31,16 @@ public class PlayerData : MonoBehaviour
 
     public void UpdateExperience(float experience)
     {
-        if (this.experience + experience > 100)
+        if (this.experience + (experience * PlayerPrefs.GetFloat("ExpGain")) > 100)
         {
             this.experience = 0;
             level++;
+
+            GameData.HandleLevelUp();
         }
         else
         {
-            this.experience += experience;   
+            this.experience += experience * PlayerPrefs.GetFloat("ExpGain");   
         }
     }
 }

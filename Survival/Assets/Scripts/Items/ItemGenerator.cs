@@ -78,19 +78,21 @@ public class ItemGenerator : MonoBehaviour
                 healing.gameObject.SetActive(true);
 
                 canGenerateHealing = false;
+
+                StartCoroutine(DealyHealingGeneration());
             }
         }
     }
 
     IEnumerator DelayOrbGeneration()
     {
-        yield return new WaitForSeconds(orbDelay);
+        yield return new WaitForSeconds(orbDelay * PlayerPrefs.GetFloat("ItemDelay"));
         canGenerateOrbs = true;
     }
 
     IEnumerator DealyHealingGeneration()
     {
-        yield return new WaitForSeconds(healingDelay);
+        yield return new WaitForSeconds(healingDelay * PlayerPrefs.GetFloat("ItemDelay"));
         canGenerateHealing = true;
     }
 }

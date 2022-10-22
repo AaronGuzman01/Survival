@@ -11,12 +11,14 @@ public class ProjectileGenerator : MonoBehaviour
     private GameObject projectile;
     [SerializeField]
     private float speed;
+    private float genDelay;
     private bool hasGenerated;
 
     // Start is called before the first frame update
     void Start()
     {
         hasGenerated = false;
+        genDelay = 1f;
     }
 
     // Update is called once per frame
@@ -45,7 +47,7 @@ public class ProjectileGenerator : MonoBehaviour
 
     IEnumerator GenerationDelay()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(genDelay * PlayerPrefs.GetFloat("ProjDelay"));
 
         hasGenerated = false;
     }

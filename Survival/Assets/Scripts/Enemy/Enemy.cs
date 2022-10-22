@@ -28,21 +28,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void SetDamageTaken(float damage)
-    {
-        if (health - damage > 0f)
-        {
-            health -= damage;
-        }
-        else
-        {
-            health = 0f;
-        }
-    }
-
     public float GetEnemyDamage()
     {
-        return enemyDamage;
+        return enemyDamage * PlayerPrefs.GetFloat("EnemyDamage");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
