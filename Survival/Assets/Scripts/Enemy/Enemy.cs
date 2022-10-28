@@ -28,9 +28,24 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void UpdateHealth(float health)
+    {
+        this.health = health;
+    }
+
+    public void UpdateDamage(float damage)
+    {
+        enemyDamage = damage;
+    }
+
     public float GetEnemyDamage()
     {
-        return enemyDamage * PlayerPrefs.GetFloat("EnemyDamage");
+        return enemyDamage;
+    }
+
+    public float GetEnemyHealth()
+    {
+        return health;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
