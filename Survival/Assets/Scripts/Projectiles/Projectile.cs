@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
     [SerializeField]
     private float damage;
+    private int projLevel;
     private Vector3 origPos;
     private bool origSet;
     private bool canPierce;
@@ -18,15 +17,30 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    public void ResetLevel()
+    {
+        projLevel = 0;
+    }
+
     public void SetOriginPosition(Vector3 pos)
     {
         origPos = pos;
         origSet = true;
     }
 
+    public void UpdateLevel()
+    {
+        projLevel++;
+    }
+
     public float GetDamage()
     {
         return damage * PlayerPrefs.GetFloat("ProjDamage");
+    }
+
+    public int GetLevel()
+    {
+        return projLevel;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
