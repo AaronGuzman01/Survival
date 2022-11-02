@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,23 +26,21 @@ public class ProjectileGenerator : MonoBehaviour
     void Update()
     {
         transform.position = player.position;
+    }
 
-        if (!hasGenerated)
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Enemy>() && !hasGenerated)
         {
-            Collider2D col = Physics2D.OverlapBox(transform.position, transform.localScale, 0f);
+            GameObject newProj = Instantiate(projectile, player.position, Quaternion.FromToRotation(Vector3.up, collision.transform.position - player.position));
 
-            if (col.GetComponent<Enemy>())
-            {
-                GameObject newProj = Instantiate(projectile, player.position, Quaternion.FromToRotation(Vector3.up, col.transform.position - player.position));
+            newProj.GetComponent<Projectile>().SetOriginPosition(player.position);
 
-                newProj.GetComponent<Projectile>().SetOriginPosition(player.position);
+            newProj.GetComponent<Rigidbody2D>().velocity = (collision.transform.position - newProj.transform.position).normalized * speed;
 
-                newProj.GetComponent<Rigidbody2D>().velocity = (col.transform.position - newProj.transform.position).normalized * speed;
+            hasGenerated = true;
 
-                hasGenerated = true;
-
-                StartCoroutine(GenerationDelay());
-            }
+            StartCoroutine(GenerationDelay());
         }
     }
 

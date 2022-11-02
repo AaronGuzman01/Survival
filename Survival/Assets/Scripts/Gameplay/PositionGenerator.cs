@@ -17,6 +17,22 @@ public class PositionGenerator : MonoBehaviour
 
         return new Vector2(randomXPos, randomYPos);
     }
+    
+    public static Vector2 GenerateRandomPosition(Vector2 playerPos, float xMinRange, float xMaxRange, float yMinRange, float yMaxRange)
+    {
+        float playerXPos = playerPos.x;
+        float playerYPos = playerPos.y;
+        float randomXPos = Random.Range(playerXPos - xMaxRange, playerXPos + xMaxRange);
+        float randomYPos = Random.Range(playerYPos - yMaxRange, playerYPos + yMaxRange);
+
+        while ((randomXPos < xMinRange && randomXPos > -xMinRange) && (randomYPos < yMinRange && randomYPos > -yMinRange))
+        {
+            randomXPos = Random.Range(playerXPos - xMaxRange, playerXPos + xMaxRange);
+            randomYPos = Random.Range(playerYPos - yMaxRange, playerYPos + yMaxRange);
+        }
+
+        return new Vector2(randomXPos, randomYPos);
+    }
 
     public static Vector2 GenerateRandomQuadrantPosition(Vector2 playerPos, float minRange, float maxRange, int quadrant)
     {
