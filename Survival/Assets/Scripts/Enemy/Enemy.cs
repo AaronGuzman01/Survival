@@ -63,5 +63,18 @@ public class Enemy : MonoBehaviour
 
             player.GetComponent<Player>().GetExperienceFromKill(enemyExp);
         }
+        else if (collision.GetComponent<Ability>())
+        {
+            if (health - collision.GetComponent<Ability>().GetDamage() > 0f)
+            {
+                health -= collision.GetComponent<Ability>().GetDamage();
+            }
+            else
+            {
+                health = 0f;
+            }
+
+            player.GetComponent<Player>().GetExperienceFromKill(enemyExp);
+        }
     }
 }

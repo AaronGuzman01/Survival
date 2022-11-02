@@ -1,38 +1,28 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Lightning : MonoBehaviour
 {
-    private Transform player;
+    [SerializeField]
     private float delay;
-    private bool canSpawn;
 
     // Start is called before the first frame update
     void Start()
     {
-        delay = 3f;
-        canSpawn = true;
+        StartCoroutine(DestroyDelay());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (canSpawn)
-        {
-            canSpawn = false;
-
-        }
+        
     }
 
-    public void SetPlayer(Transform player)
-    {
-        this.player = player;
-    }
-
-    IEnumerator DelaySpawn()
+    IEnumerator DestroyDelay()
     {
         yield return new WaitForSeconds(delay);
 
-        canSpawn = true;
+        Destroy(gameObject);
     }
 }
