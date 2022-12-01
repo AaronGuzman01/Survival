@@ -14,6 +14,7 @@ public class EnemyGenerator : MonoBehaviour
     private bool[] canSpawn;
     [SerializeField]
     private float[] delays;
+    private GameObject enemy;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +38,7 @@ public class EnemyGenerator : MonoBehaviour
             {
                 for (int j = 0; j < spawnAmount[i]; j++)
                 {
-                    GameObject enemy = Instantiate(enemies[i], transform);
+                    enemy = Instantiate(enemies[i], transform);
 
                     spawnCount++;
 

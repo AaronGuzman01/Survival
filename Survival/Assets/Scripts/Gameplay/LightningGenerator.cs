@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightningGenerator : MonoBehaviour
@@ -13,7 +12,8 @@ public class LightningGenerator : MonoBehaviour
     public float xmin, xmax, ymin, ymax;
     private bool canSpawn;
     private Vector2 position;
-    private GameObject current;
+    private GameObject target;
+    private GameObject newLightning;
     private int spawnCount;
     private int spawned;
 
@@ -30,7 +30,7 @@ public class LightningGenerator : MonoBehaviour
     {
         transform.position = player.position;
 
-        if (canSpawn && !current)
+        if (canSpawn && !target)
         {
             position = PositionGenerator.GenerateRandomPosition(player.position, xmin, xmax, ymin, ymax);
 
@@ -43,11 +43,11 @@ public class LightningGenerator : MonoBehaviour
         if (collision.GetComponent<Enemy>())
         {
             position = collision.gameObject.transform.position;
-            current = collision.gameObject;
+            target = collision.gameObject;
 
             if (canSpawn)
             {
-                current = null;
+                target = null;
                 HandleSpawn();
             }
         }
@@ -57,16 +57,17 @@ public class LightningGenerator : MonoBehaviour
     {
         if (collision.GetComponent<Enemy>())
         {
-            if (current == collision.gameObject)
+            if (target == collision.gameObject)
             {
-                current = null;
+                target = null;
             }
         }
     }
 
     private void HandleSpawn()
     {
-        Instantiate(field, position, player.rotation);
+        newLightning = Instantiate(field, position, player.rotation);
+        newLightning.SetActive(true);
 
         spawned++;
 

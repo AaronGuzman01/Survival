@@ -1,24 +1,26 @@
 using UnityEngine;
 
-public class Ability : MonoBehaviour
+public class Wind : MonoBehaviour
 {
     [SerializeField]
-    private float damage;
+    private Transform player;
+    [SerializeField]
+    private float speed;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public float GetDamage()
+    public float GetSpeed()
     {
-        return damage;
+        return speed;
     }
 }

@@ -12,6 +12,7 @@ public class ProjectileGenerator : MonoBehaviour
     private GameObject projectile;
     [SerializeField]
     private float speed;
+    private GameObject newProj;
     private float genDelay;
     private bool hasGenerated;
 
@@ -32,7 +33,7 @@ public class ProjectileGenerator : MonoBehaviour
     {
         if (collision.GetComponent<Enemy>() && !hasGenerated)
         {
-            GameObject newProj = Instantiate(projectile, player.position, Quaternion.FromToRotation(Vector3.up, collision.transform.position - player.position));
+            newProj = Instantiate(projectile, player.position, Quaternion.FromToRotation(Vector3.up, collision.transform.position - player.position));
 
             newProj.GetComponent<Projectile>().SetOriginPosition(player.position);
 
