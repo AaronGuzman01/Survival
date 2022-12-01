@@ -54,7 +54,7 @@ public class ItemGenerator : MonoBehaviour
                     if (Random.value < orbChance[i] / 100f)
                     {
                         GameObject orb = Instantiate(orbs[i], transform);
-                        orb.transform.position = PositionGenerator.GenerateRandomPosition(player.position, 5f, 25f);
+                        orb.transform.position = PositionGenerator.GenerateRandomPosition(player.position, 6f, 25f);
                         orb.gameObject.SetActive(true);
                         orbCount++;
                     }

@@ -10,15 +10,14 @@ public class ItemAttracter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ItemData.scale = transform.localScale.x;
         transform.position = player.position;
+    }
 
-        foreach (Collider2D col in Physics2D.OverlapBoxAll(transform.position, transform.localScale, 0f))
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<ItemData>())
         {
-            if (col.GetComponent<ItemData>())
-            {
-                col.GetComponent<ItemData>().SetFollow();
-            }
+            collision.GetComponent<ItemData>().SetFollow();
         }
     }
 }

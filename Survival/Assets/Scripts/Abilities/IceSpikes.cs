@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Lightning : MonoBehaviour
+public class IceSpikes : MonoBehaviour
 {
     [SerializeField]
     private float delay;
@@ -10,6 +10,7 @@ public class Lightning : MonoBehaviour
     void Start()
     {
         StartCoroutine(DestroyDelay());
+
     }
 
     // Update is called once per frame

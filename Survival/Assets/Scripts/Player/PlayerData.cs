@@ -36,7 +36,7 @@ public class PlayerData : MonoBehaviour
             this.experience = 0;
             level++;
 
-            FindObjectOfType<GameHandler>().HandleLevelUp();
+            FindObjectOfType<GameManager>().HandleLevelUp();
         }
         else
         {

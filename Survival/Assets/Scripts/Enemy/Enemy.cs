@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -12,6 +13,9 @@ public class Enemy : MonoBehaviour
     private float health;
     [SerializeField]
     private float enemyExp;
+    [SerializeField]
+    private bool isFlying;
+    private bool isDrowning;
 
     // Update is called once per frame
     void Update()
@@ -25,6 +29,8 @@ public class Enemy : MonoBehaviour
         if (health == 0)
         {
             Destroy(gameObject);
+
+            player.GetComponent<Player>().GetExperienceFromKill(enemyExp);
         }
     }
 
@@ -38,6 +44,11 @@ public class Enemy : MonoBehaviour
         enemyDamage = damage;
     }
 
+    public void SetDrowning(bool drowning)
+    {
+        isDrowning = drowning;
+    }
+
     public float GetEnemyDamage()
     {
         return enemyDamage;
@@ -46,6 +57,16 @@ public class Enemy : MonoBehaviour
     public float GetEnemyHealth()
     {
         return health;
+    }
+
+    public bool IsDrowning()
+    {
+        return isDrowning;
+    }
+
+    public bool IsFlying()
+    {
+        return isFlying;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -60,21 +81,56 @@ public class Enemy : MonoBehaviour
             {
                 health = 0f;
             }
-
-            player.GetComponent<Player>().GetExperienceFromKill(enemyExp);
         }
         else if (collision.GetComponent<Ability>())
         {
-            if (health - collision.GetComponent<Ability>().GetDamage() > 0f)
+            if (collision.GetComponent<Lightning>() || (collision.GetComponent<Earthquake>() && !isFlying))
             {
-                health -= collision.GetComponent<Ability>().GetDamage();
+                if (health - collision.GetComponent<Ability>().GetDamage() > 0f)
+                {
+                    health -= collision.GetComponent<Ability>().GetDamage();
+                }
+                else
+                {
+                    health = 0f;
+                }
             }
-            else
-            {
-                health = 0f;
-            }
+        }
+    }
 
-            player.GetComponent<Player>().GetExperienceFromKill(enemyExp);
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Ability>())
+        {
+            if (collision.GetComponent<IceSpikes>() || (collision.GetComponent<Bubble>() && collision.GetComponent<Bubble>().IsTarget(gameObject)))
+            {
+                if (health - collision.GetComponent<Ability>().GetDamage() * Time.deltaTime > 0f)
+                {
+                    health -= collision.GetComponent<Ability>().GetDamage() * Time.deltaTime;
+                }
+                else
+                {
+                    health = 0f;
+                }
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.GetComponent<Ability>())
+        {
+            if (collision.collider.GetComponent<Wind>())
+            {
+                if (health - collision.collider.GetComponent<Ability>().GetDamage() > 0f)
+                {
+                    health -= collision.collider.GetComponent<Ability>().GetDamage();
+                }
+                else
+                {
+                    health = 0f;
+                }
+            }
         }
     }
 }
