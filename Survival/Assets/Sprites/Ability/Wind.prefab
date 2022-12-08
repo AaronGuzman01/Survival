@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.74038804, g: 0.84104854, b: 0.8867924, a: 0.47058824}
+  m_Color: {r: 0, g: 0.6438039, b: 0.9528302, a: 0.11764706}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -113,8 +113,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e49d60682b08a943a2b0bac386498ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  existTime: 3
   speed: 5
+  force: 110
+  alphaChange: 0.05
+  pushTime: 1
 --- !u!60 &8089266725893109050
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -125,7 +128,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

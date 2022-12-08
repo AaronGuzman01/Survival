@@ -1,7 +1,6 @@
-using System.Collections;
 using UnityEngine;
 
-public class Earthquake : MonoBehaviour
+public class Rock : MonoBehaviour
 {
     [SerializeField]
     private float existTime;
@@ -12,13 +11,12 @@ public class Earthquake : MonoBehaviour
     void Start()
     {
         GetComponent<Ability>().SetExistTime(existTime);
-
         GetComponent<Ability>().SetDisableTime(disableTime);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 }

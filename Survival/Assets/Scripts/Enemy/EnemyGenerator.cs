@@ -7,6 +7,8 @@ public class EnemyGenerator : MonoBehaviour
     [SerializeField]
     private Transform player;
     [SerializeField]
+    private float minSpawnDist, maxSpawnDist;
+    [SerializeField]
     private List<GameObject> enemies;
     [SerializeField]
     private int[] spawnAmount;
@@ -44,19 +46,19 @@ public class EnemyGenerator : MonoBehaviour
 
                     if (spawnCount == 1)
                     {
-                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 1);
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, minSpawnDist, maxSpawnDist, 1);
                     }
                     else if (spawnCount == 2)
                     {
-                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 2);
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, minSpawnDist, maxSpawnDist, 2);
                     }
                     else if (spawnCount == 3)
                     {
-                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 3);
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, minSpawnDist, maxSpawnDist, 3);
                     }
                     else
                     {
-                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, 20f, 30f, 4);
+                        enemy.transform.position = PositionGenerator.GenerateRandomQuadrantPosition(player.position, minSpawnDist, maxSpawnDist, 4);
 
                         spawnCount = 0;
                     }

@@ -16,11 +16,17 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private bool isFlying;
     private bool isDrowning;
+    private bool isPushed;
+    private float pushTime;
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector2.Lerp(transform.position, player.transform.position, Time.deltaTime * enemySpeed);
+        if (!isPushed)
+        {
+            GetComponent<Rigidbody2D>().velocity = (player.transform.position - transform.position).normalized * enemySpeed;
+        }
+
         CheckDeath();
     }
 
@@ -47,6 +53,17 @@ public class Enemy : MonoBehaviour
     public void SetDrowning(bool drowning)
     {
         isDrowning = drowning;
+    }
+
+    public void SetPushed(float time)
+    {
+        if (!isPushed)
+        {
+            isPushed = true;
+            pushTime = time;
+            StartCoroutine(WaitForPush());
+        }
+
     }
 
     public float GetEnemyDamage()
@@ -84,7 +101,8 @@ public class Enemy : MonoBehaviour
         }
         else if (collision.GetComponent<Ability>())
         {
-            if (collision.GetComponent<Lightning>() || (collision.GetComponent<Earthquake>() && !isFlying))
+            if (collision.GetComponent<Lightning>() || collision.GetComponent<Rock>() || 
+               (collision.GetComponent<Earthquake>() && !isFlying))
             {
                 if (health - collision.GetComponent<Ability>().GetDamage() > 0f)
                 {
@@ -102,7 +120,8 @@ public class Enemy : MonoBehaviour
     {
         if (collision.GetComponent<Ability>())
         {
-            if (collision.GetComponent<IceSpikes>() || (collision.GetComponent<Bubble>() && collision.GetComponent<Bubble>().IsTarget(gameObject)))
+            if (collision.GetComponent<IceSpikes>() || collision.GetComponent<Wind>() ||
+               (collision.GetComponent<Bubble>() && collision.GetComponent<Bubble>().IsTarget(gameObject)))
             {
                 if (health - collision.GetComponent<Ability>().GetDamage() * Time.deltaTime > 0f)
                 {
@@ -132,5 +151,10 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+    IEnumerator WaitForPush()
+    {
+        yield return new WaitForSeconds(pushTime);
+        isPushed = false;
     }
 }

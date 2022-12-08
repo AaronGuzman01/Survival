@@ -4,12 +4,12 @@ using UnityEngine;
 public class IceSpikes : MonoBehaviour
 {
     [SerializeField]
-    private float delay;
+    private float existTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(DestroyDelay());
+        GetComponent<Ability>().SetExistTime(existTime);
 
     }
 
@@ -17,12 +17,5 @@ public class IceSpikes : MonoBehaviour
     void Update()
     {
         
-    }
-
-    IEnumerator DestroyDelay()
-    {
-        yield return new WaitForSeconds(delay);
-
-        Destroy(gameObject);
     }
 }

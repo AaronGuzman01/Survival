@@ -112,8 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4ea61bd0a56b1a4c81fc926ce50ce29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyDelay: 20
-  disableDelay: 0.5
+  existTime: 5
+  disableTime: 0.5
 --- !u!60 &1718918834767167550
 PolygonCollider2D:
   m_ObjectHideFlags: 0

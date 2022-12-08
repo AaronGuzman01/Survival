@@ -1,27 +1,22 @@
-using System.Collections;
 using UnityEngine;
 
 public class Lightning : MonoBehaviour
 {
     [SerializeField]
-    private float delay;
+    private float existTime;
+    [SerializeField]
+    private float disableTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(DestroyDelay());
+        GetComponent<Ability>().SetExistTime(existTime);
+        GetComponent<Ability>().SetDisableTime(disableTime);  
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
 
-    IEnumerator DestroyDelay()
-    {
-        yield return new WaitForSeconds(delay);
-
-        Destroy(gameObject);
     }
 }

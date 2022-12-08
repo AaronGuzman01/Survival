@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class WindGenerator : MonoBehaviour
 {
@@ -12,22 +11,35 @@ public class WindGenerator : MonoBehaviour
     private float spawnDelay;
     [SerializeField]
     private float stopDelay;
+    [SerializeField]
+    private float rotationRange;
     private bool canGenerate;
     private bool stopGenerating;
     private GameObject newWind;
     private Vector3 position;
+    private Vector3 newPos;
+    private Vector3 oldPlayerPos;
 
     // Start is called before the first frame update
     void Start()
     {
         canGenerate = true;
         stopGenerating = false;
+        oldPlayerPos = player.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position = player.position;
+
+        position += player.position - oldPlayerPos;
+        oldPlayerPos = player.position;
+
+        Debug.DrawLine(player.position, position, Color.green);
+        Debug.DrawLine(player.position, newPos, Color.red);
+        Debug.DrawLine(player.position, (Quaternion.AngleAxis(-rotationRange / 2f, Vector3.forward) * (position - player.position)) + player.position, Color.white);
+        Debug.DrawLine(player.position, (Quaternion.AngleAxis(rotationRange / 2f, Vector3.forward) * (position - player.position)) + player.position, Color.white);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -60,17 +72,17 @@ public class WindGenerator : MonoBehaviour
 
     IEnumerator Spawn()
     {
-        Vector3 variation = new Vector3(Random.Range(0f, 1f) * PosOrNeg(), Random.Range(0f, 1f) * PosOrNeg(), 0);
-        position += variation;
+        float rotationAngle = Random.Range(-rotationRange / 2f, rotationRange / 2f);
+        newPos = (Quaternion.AngleAxis(rotationAngle, Vector3.forward) * (position - player.position)) + player.position;
 
-        newWind = Instantiate(wind, player.position, Quaternion.FromToRotation(Vector3.up, position - player.position));
+        newWind = Instantiate(wind, player.position, Quaternion.FromToRotation(Vector3.up, newPos - player.position));
 
         newWind.SetActive(true);
-        newWind.GetComponent<Rigidbody2D>().velocity = (position - newWind.transform.position).normalized * newWind.GetComponent<Wind>().GetSpeed();
+        newWind.GetComponent<Rigidbody2D>().velocity = (newPos - newWind.transform.position).normalized * newWind.GetComponent<Wind>().GetSpeed();
 
         if (!stopGenerating)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.25f);
             StartCoroutine(Spawn());
         }
         else

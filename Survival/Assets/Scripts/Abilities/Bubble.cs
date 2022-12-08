@@ -4,7 +4,7 @@ using UnityEngine;
 public class Bubble : MonoBehaviour
 {
     [SerializeField]
-    private float delay;
+    private float existTime;
     [SerializeField]
     private float speed;
     private GameObject target;
@@ -17,7 +17,7 @@ public class Bubble : MonoBehaviour
     {
         accel = 1.1f;
         targetReached = false;
-        StartCoroutine(DestroyDelay());
+        StartCoroutine(WaitForExistTime());
     }
 
     // Update is called once per frame
@@ -59,9 +59,9 @@ public class Bubble : MonoBehaviour
         return target.Equals(enemy);
     }
 
-    IEnumerator DestroyDelay()
+    IEnumerator WaitForExistTime()
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(existTime);
 
         target.GetComponent<Enemy>().SetDrowning(false);
 
