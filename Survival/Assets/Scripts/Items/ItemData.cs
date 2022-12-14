@@ -3,24 +3,25 @@ using UnityEngine;
 public class ItemData : MonoBehaviour
 {
     public static Vector3 playerPos;
-    private float accel;
+    [SerializeField]
+    private float speed;
     private bool followPlayer;
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
         followPlayer = false;
-        accel = 1.1f;
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (followPlayer)
         {
-            transform.position = Vector2.Lerp(transform.position, playerPos, Time.deltaTime * accel);
+            rb.velocity = (playerPos - transform.position).normalized * speed;
 
-            accel += accel * 2f * Time.deltaTime;
+            speed += 2f * Time.deltaTime;
         }
     }
 

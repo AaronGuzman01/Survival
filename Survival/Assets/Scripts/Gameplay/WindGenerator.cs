@@ -35,11 +35,6 @@ public class WindGenerator : MonoBehaviour
 
         position += player.position - oldPlayerPos;
         oldPlayerPos = player.position;
-
-        Debug.DrawLine(player.position, position, Color.green);
-        Debug.DrawLine(player.position, newPos, Color.red);
-        Debug.DrawLine(player.position, (Quaternion.AngleAxis(-rotationRange / 2f, Vector3.forward) * (position - player.position)) + player.position, Color.white);
-        Debug.DrawLine(player.position, (Quaternion.AngleAxis(rotationRange / 2f, Vector3.forward) * (position - player.position)) + player.position, Color.white);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

@@ -1,23 +1,23 @@
 using System.Collections;
 using UnityEngine;
 
-public class BubbleGenerator : MonoBehaviour
+public class FireballGenerator : MonoBehaviour
 {
     [SerializeField]
     private Transform player;
     [SerializeField]
-    private GameObject bubble;
+    private GameObject fireball;
     [SerializeField]
     private float delay;
     private bool canSpawn;
     private int spawnCount;
     private int spawned;
-    private GameObject newBubble;
+    private GameObject newFireball;
 
     // Start is called before the first frame update
     void Start()
     {
-        canSpawn = true;   
+        canSpawn = true;
         spawnCount = 1;
         spawned = 0;
     }
@@ -30,13 +30,11 @@ public class BubbleGenerator : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (canSpawn && spawned < spawnCount && collision.GetComponent<Enemy>() && !collision.GetComponent<Enemy>().IsDrowning())
+        if (canSpawn && collision.GetComponent<Enemy>())
         {
-            
-            newBubble = Instantiate(bubble);
-            newBubble.transform.position = player.position;
-            newBubble.SetActive(true);
-            newBubble.GetComponent<Bubble>().SetTarget(collision.gameObject);
+            newFireball = Instantiate(fireball, player.position, Quaternion.FromToRotation(Vector3.up, collision.transform.position - player.position));
+            newFireball.SetActive(true);
+            newFireball.GetComponent<Rigidbody2D>().velocity = (collision.transform.position - newFireball.transform.position).normalized * newFireball.GetComponent<Fireball>().GetSpeed();
 
             spawned++;
 

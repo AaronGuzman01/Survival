@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
                     playerData.UpdateHealth(100f);
                 }
 
-                health.value = playerData.GetHealth();
+                health.value = playerData.GetHealth() / 100f;
                 Destroy(collision.GetComponent<HealingData>().gameObject);
             }
         }

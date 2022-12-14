@@ -18,13 +18,20 @@ public class Enemy : MonoBehaviour
     private bool isDrowning;
     private bool isPushed;
     private float pushTime;
+    private Rigidbody2D rb;
 
-    // Update is called once per frame
-    void Update()
+    // Start is called before the first frame update
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+
+    void FixedUpdate()
     {
         if (!isPushed)
         {
-            GetComponent<Rigidbody2D>().velocity = (player.transform.position - transform.position).normalized * enemySpeed;
+            rb.velocity = (player.transform.position - transform.position).normalized * enemySpeed;
         }
 
         CheckDeath();
@@ -101,7 +108,7 @@ public class Enemy : MonoBehaviour
         }
         else if (collision.GetComponent<Ability>())
         {
-            if (collision.GetComponent<Lightning>() || collision.GetComponent<Rock>() || 
+            if (collision.GetComponent<Lightning>() || collision.GetComponent<Rock>() ||
                (collision.GetComponent<Earthquake>() && !isFlying))
             {
                 if (health - collision.GetComponent<Ability>().GetDamage() > 0f)
@@ -120,7 +127,7 @@ public class Enemy : MonoBehaviour
     {
         if (collision.GetComponent<Ability>())
         {
-            if (collision.GetComponent<IceSpikes>() || collision.GetComponent<Wind>() ||
+            if (collision.GetComponent<IceSpikes>() || collision.GetComponent<Wind>() || collision.GetComponent<Laser>() ||
                (collision.GetComponent<Bubble>() && collision.GetComponent<Bubble>().IsTarget(gameObject)))
             {
                 if (health - collision.GetComponent<Ability>().GetDamage() * Time.deltaTime > 0f)
@@ -131,6 +138,19 @@ public class Enemy : MonoBehaviour
                 {
                     health = 0f;
                 }
+            }
+            else if (collision.GetComponent<Fireball>())
+            {
+                if (health - collision.GetComponent<Ability>().GetDamage() > 0f)
+                {
+                    health -= collision.GetComponent<Ability>().GetDamage();
+                }
+                else
+                {
+                    health = 0f;
+                }
+
+                collision.GetComponent<Ability>().DestroyAbility();
             }
         }
     }

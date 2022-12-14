@@ -6,30 +6,29 @@ public class Bubble : MonoBehaviour
     [SerializeField]
     private float existTime;
     [SerializeField]
-    private float speed;
+    private float speed, accel;
     private GameObject target;
-    private float accel;
     private bool targetSet;
     private bool targetReached;
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        accel = 1.1f;
         targetReached = false;
+        rb = GetComponent<Rigidbody2D>();
         StartCoroutine(WaitForExistTime());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (target != null && targetSet)
         {
             if (!targetReached)
             {
-                transform.position = Vector2.Lerp(transform.position, target.transform.position, Time.deltaTime * accel);
+                rb.velocity = (target.transform.position - transform.position).normalized * speed;
 
-                accel += accel * 1.3f * Time.deltaTime;
+                speed += accel * Time.deltaTime;
 
                 if (Vector2.Distance(transform.position, target.transform.position)  <= 0.5f)
                 {

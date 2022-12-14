@@ -25,6 +25,11 @@ public class Ability : MonoBehaviour
         return damage;
     }
 
+    public void DestroyAbility()
+    {
+        Destroy(gameObject);
+    }
+
     public void SetExistTime(float existTime)
     {
         this.existTime = existTime;
