@@ -24,6 +24,11 @@ public class PlayerData : MonoBehaviour
         return experience;
     }
 
+    public int GetLevel()
+    {
+        return level;
+    }
+
     public void UpdateHealth(float health)
     {
         this.health = health;

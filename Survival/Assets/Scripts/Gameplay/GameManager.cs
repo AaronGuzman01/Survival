@@ -9,15 +9,25 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject selection;
     [SerializeField]
+    private List<Button> options;
+    [SerializeField]
     private GameObject joystick;
     [SerializeField]
-    private List<GameObject> enenmies;
+    private List<GameObject> enemies;
     [SerializeField]
     private List<GameObject> projectiles;
+    [SerializeField]
+    private List<GameObject> abilities;
+    private List<float> probabilites;
+    private List<int> accessed, maxed;
 
     // Start is called before the first frame update
     void Start()
     {
+        probabilites = new List<float>();
+        accessed = new List<int>();
+        maxed = new List<int>();    
+
         PlayerPrefs.SetFloat("ExpGain", 1f);
         PlayerPrefs.SetFloat("ProjDamage", 1f);
         PlayerPrefs.SetFloat("ProjDelay", 1f);
@@ -25,15 +35,15 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("ItemDelay", 1f);
 
         ResetProjectiles();
+        SetProbabilites();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void ResetProjectiles()
+    private void ResetProjectiles()
     {
         foreach (GameObject projectile in projectiles)
         {
@@ -41,10 +51,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void SetProbabilites()
+    {
+        for (var i = 0; i < abilities.Count; i++)
+        {
+            probabilites.Add(1f);
+        }
+    }
+
     public void HandleLevelUp()
     {
         Time.timeScale = 0;
         PlayerPrefs.SetFloat("ExpGain", PlayerPrefs.GetFloat("ExpGain") * 0.98f);
+        
+        if  (player.GetComponent<PlayerData>().GetLevel() %  5  == 0)
+        {
+            PlayerPrefs.SetFloat("ExpGain", PlayerPrefs.GetFloat("ExpGain") * 0.95f);
+        }
 
         UpdateEnemies();
         HandleSelection();
@@ -52,7 +75,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateEnemies()
     {
-        foreach (GameObject enemy in enenmies)
+        foreach (GameObject enemy in enemies)
         {
             Enemy enemyInfo = enemy.GetComponent<Enemy>();
 
@@ -63,66 +86,97 @@ public class GameManager : MonoBehaviour
 
     private void HandleSelection()
     {
-        for (int i = 0; i < /*selection.transform.childCount*/ 1; i++)
-        {
-            GameObject panel = selection.transform.GetChild(i).gameObject;
-            panel.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
-            UpdateProjectile(panel);
-        }
-
         selection.SetActive(true);
         joystick.SetActive(false);
         joystick.GetComponent<MovementJoystick>().PointerUp();
-    }
 
-    public void UpdateProjectile(GameObject panel)
-    {
-        string text = "";
-        Projectile projectile;
-
-        projectile = projectiles[0].GetComponent<Projectile>();
-
-        switch(projectile.GetLevel())
+        foreach (Button option in options)
         {
-            case 0:
-                text = "Increase projectile damage by 20%";
-                panel.GetComponentInChildren<Button>().onClick.AddListener(IncreaseProjectileDamage);
-                break;
-            case 1:
-                text = "Increase projectile speed by 15%";
-                panel.GetComponentInChildren<Button>().onClick.AddListener(IncreaseProjectileSpeed);
-                break;
-            case 2:
-                text = "Increase projectile damage by 20%";
-                panel.GetComponentInChildren<Button>().onClick.AddListener(IncreaseProjectileDamage);
-                break;
-            case 3:
-                text = "Increase projectile speed by 15%";
-                panel.GetComponentInChildren<Button>().onClick.AddListener(IncreaseProjectileSpeed);
-                break;
-            default:
-                text = "FINAL UPGRADE TBA";
-                panel.GetComponentInChildren<Button>().onClick.AddListener(CloseSelection);
-                break;
-
+            option.transform.parent.GetComponentInChildren<Text>().text = "";
+            option.onClick.RemoveAllListeners();
+            DisplayOption(option);
         }
 
-        projectile.UpdateLevel();
-        panel.GetComponentInChildren<Text>().text = text;
+        accessed.Clear();
+        UpdateMaxedUpgrades();
     }
 
-    public void IncreaseProjectileDamage()
+    private void DisplayOption(Button option)
     {
-        PlayerPrefs.SetFloat("ProjDamage", PlayerPrefs.GetFloat("ProjDamage") * 1.20f);
+        bool displayed = false;
+        int index;
+        float prob;
 
-        CloseSelection();
+        while (!displayed)
+        {
+            index = Random.Range(0, abilities.Count);
+            prob = Random.value;
+
+            if (!accessed.Contains(index) && prob <= probabilites[index]) {
+                accessed.Add(index);
+                displayed = true;
+
+                switch(index)
+                {
+                    case 0:
+                        abilities[index].GetComponent<ProjectileGenerator>().UpdateProjectile(option);
+                        option.onClick.AddListener(delegate { UpdateProbability(index, 0.2f); });
+                        break;
+                        /*
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                        */
+                    case 7:
+                        abilities[index].GetComponent<FireballGenerator>().UpdateFireballl(option);
+                        option.onClick.AddListener(delegate { UpdateProbability(index, 0.1f); });
+                        break;
+                        /*
+                    case 8:
+                        break;
+                         */
+                    default:
+                        break;
+                }
+            }
+
+            option.onClick.AddListener(CloseSelection);
+        }
     }
 
-    public void IncreaseProjectileSpeed()
+    private void UpdateProbability(int index, float change)
     {
-        PlayerPrefs.SetFloat("ProjDelay", PlayerPrefs.GetFloat("ProjDelay") - 0.15f);
+        if (probabilites[index] - change >= 0f)
+        {
+            probabilites[index] -= change;
+        }
+        else
+        {
+            probabilites[index] = 0f;
+            maxed.Add(index);
+        }
 
-        CloseSelection();
+        foreach (var prob in probabilites)
+        {
+            Debug.Log(prob);
+        }
+    }
+
+    private void UpdateMaxedUpgrades()
+    {
+        foreach (var index in maxed)
+        {
+            probabilites[index] += 0.01f;
+        }
     }
 
     private void CloseSelection()

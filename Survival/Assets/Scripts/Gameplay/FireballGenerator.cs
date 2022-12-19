@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FireballGenerator : MonoBehaviour
 {
@@ -26,6 +27,21 @@ public class FireballGenerator : MonoBehaviour
     void Update()
     {
         transform.position = player.position;
+    }
+
+    public void UpdateFireballl(Button button)
+    {
+        fireball.GetComponent<Fireball>().UpdateFireball(button, this);
+    }
+
+    public void UpdateDelay()
+    {
+        delay = delay * 0.85f;
+    }
+
+    public void UpdateCount()
+    {
+        spawnCount++;
     }
 
     private void OnTriggerStay2D(Collider2D collision)

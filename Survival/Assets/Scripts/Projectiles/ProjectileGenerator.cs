@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProjectileGenerator : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class ProjectileGenerator : MonoBehaviour
     void Update()
     {
         transform.position = player.position;
+    }
+
+    public void UpdateProjectile(Button button)
+    {
+        projectile.GetComponent<Projectile>().UpdateProjectile(button);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

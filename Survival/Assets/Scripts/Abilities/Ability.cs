@@ -5,19 +5,24 @@ public class Ability : MonoBehaviour
 {
     [SerializeField]
     private float damage;
-    private float existTime;
-    private float disableTime;
+    private int abillityLevel;
+    private float existTime, disableTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        abillityLevel = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public int GetLevel()
+    {
+        return abillityLevel;
     }
 
     public float GetDamage()
@@ -28,6 +33,16 @@ public class Ability : MonoBehaviour
     public void DestroyAbility()
     {
         Destroy(gameObject);
+    }
+
+    public void UpdateLevel()
+    {
+        abillityLevel++;
+    }
+
+    public void UpdateDamage(float damage)
+    {
+        this.damage = damage;
     }
 
     public void SetExistTime(float existTime)
